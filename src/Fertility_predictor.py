@@ -4,16 +4,32 @@ from src.Fertility_model import FertilityModel
 
 class FertilityPredictor(FertilityModel):
     # extends FertilityModel. Adds patient input validation and patient prediction
-
+      ''' Extends FertilityModel class with input validation and patient prediction '''
     def __init__(self):
+       '''  Initializes the FertilityPredictor and calls the parent FertilityModel initializer and sets up a container to store the last prediction result.
+         Returns:
+            None
+       '''
         super().__init__()
         self._last_result: dict | None = None
 
     @property
     def last_result(self):
+        ''' Gets the last result produced result by this predictor
+        Returns:
+        dict | None: The last result dictionary if a prediction has been made,
+        otherwise None.
+        '''
         return self._last_result
     # provides the summary of model performance
+
     def __str__(self):
+        ''' Provide a readable result of the predictor
+        If the model is not trained, returns a short message.
+        If trained, includes accuracy, number of features, and the last prediction (if available).
+        Returns:
+        str: A summary string describing the predictor's status and performance.
+        '''
         if not self._is_trained:
             return "Predictor is not trained yet"
         result = (
@@ -27,6 +43,15 @@ class FertilityPredictor(FertilityModel):
 
     @staticmethod
     def _display_result(result: dict):
+        ''' Print formatted prediction report to the console
+        Args:
+          result (dict): A result dictionary containing:
+                - "prediction" (str): Predicted class label
+                - "confidence" (float): Confidence percentage
+                - "probabilities" (dict | None): Mapping of class -> probability percentage
+        Returns:
+            None
+        '''
         print(f"\n{'*' * 70}")
         print("PREDICTION RESULTS")
         print(f"{'*' * 70}")
@@ -43,6 +68,17 @@ class FertilityPredictor(FertilityModel):
         print(f"{'*' * 70}\n")
 
     def predict_patient(self, patient_data: dict) -> dict:
+        ''' Makes a prediction using patient's data
+        Args:
+            patient_data (dict): Mapping of feature name -> value.
+                Must contain exactly the features in self._original_features.
+        Returns:
+            dict: A result dictionary containing:
+                - "prediction" (str): Decoded predicted class label
+                - "confidence" (float): Confidence percentage
+                - "probabilities" (dict): Mapping of class label -> probability percentage
+                - "patient_data" (dict): The validated/converted patient input data
+        '''
         # make a prediction using patient's data
         if not self._is_trained:
             raise  RuntimeError("Predictor is not trained yet")
@@ -72,6 +108,10 @@ class FertilityPredictor(FertilityModel):
         return result
 
     def interactive_prediction(self):
+        ''' Run an interactive command-line session to collect patient's data
+        Returns:
+            None
+        '''
         print("Patient Data")
         print("*" * 70)
         print("Enter 1 (yes) or 0 (no) for each question, except for age")
