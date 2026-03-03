@@ -119,19 +119,19 @@ class FertilityPredictor(FertilityModel):
         
         for feature in self._original_features:
             while True:
-            value = input(f"{feature}: ")
-            if feature == 'Age':
-                try:
-                    patient_data[feature] = float(value)
-                    break
-                except ValueError:
-                    print("Please enter a valid number for age")
-            else:
-                if value in ('0', '1'):
-                    patient_data[feature] = float(value)
-                    break
+                value = input(f"{feature}: ")
+                if feature == 'Age':
+                    try:
+                        patient_data[feature] = float(value)
+                        break
+                    except ValueError:
+                        print("Please enter a valid number for age")
                 else:
-                    print("Please enter 0 or 1")
+                    if value in ('0', '1'):
+                        patient_data[feature] = float(value)
+                        break
+                    else:
+                        print("Please enter 0 or 1")
 
         print(f"\nProcessing patient data")
         result = self.predict_patient(patient_data)
