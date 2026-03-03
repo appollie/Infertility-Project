@@ -118,6 +118,7 @@ class FertilityPredictor(FertilityModel):
         patient_data = {}
         
         for feature in self._original_features:
+            while True:
             value = input(f"{feature}: ")
             if feature == 'Age':
                 try:
