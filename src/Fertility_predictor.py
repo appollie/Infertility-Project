@@ -4,7 +4,7 @@ from src.Fertility_model import FertilityModel
 
 class FertilityPredictor(FertilityModel):
     # extends FertilityModel. Adds patient input validation and patient prediction
-      ''' Extends FertilityModel class with input validation and patient prediction '''
+    ''' Extends FertilityModel class with input validation and patient prediction '''
     def __init__(self):
        '''  Initializes the FertilityPredictor and calls the parent FertilityModel initializer and sets up a container to store the last prediction result.
          Returns:
