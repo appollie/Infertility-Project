@@ -3,32 +3,42 @@ import pandas as pd
 from src.Fertility_model import FertilityModel
 
 class FertilityPredictor(FertilityModel):
-    # extends FertilityModel. Adds patient input validation and patient prediction
-    ''' Extends FertilityModel class with input validation and patient prediction '''
+    ''' Extends FertilityModel with input validation and patient prediction.
+
+    Inherits all training, evaluation, and persistence functionality from
+    FertilityModel and adds methods for validating patient input and
+    producing human-readable prediction reports.
+    '''
+
     def __init__(self):
-       '''  Initializes the FertilityPredictor and calls the parent FertilityModel initializer and sets up a container to store the last prediction result.
-       Returns:
-            None
+       '''  Initialize the FertilityPredictor with default untrained state.
+
+        Calls the parent FertilityModel initializer and sets up a container
+        to store the last prediction result.
        '''
        super().__init__()
        self._last_result: dict | None = None
 
     @property
     def last_result(self):
-        ''' Gets the last result produced result by this predictor
+        ''' Return the last prediction result produced by this predictor.
+
         Returns:
-        dict | None: The last result dictionary if a prediction has been made,
-        otherwise None.
+            dict | None: The last result dictionary if a prediction has been
+                made, otherwise None.
         '''
         return self._last_result
-    # provides the summary of model performance
 
+    # Provides the summary of model performance
     def __str__(self):
-        ''' Provide a readable result of the predictor
-        If the model is not trained, returns a short message.
-        If trained, includes accuracy, number of features, and the last prediction (if available).
+        ''' Return a human-readable summary of the predictor's status and performance.
+
+        If the model is not trained, returns a short placeholder message.
+        If trained, includes accuracy, number of features, and the last
+        prediction result if one is available.
+
         Returns:
-        str: A summary string describing the predictor's status and performance.
+            str: A summary string describing the predictor's current state.
         '''
         if not self._is_trained:
             return "Predictor is not trained yet"
@@ -43,14 +53,18 @@ class FertilityPredictor(FertilityModel):
 
     @staticmethod
     def _display_result(result: dict):
-        ''' Print formatted prediction report to the console
+        ''' Print a formatted prediction report to the console.
+
+        Displays the predicted class, confidence percentage, and a visual
+        probability bar chart for each class. Also prints a disclaimer
+        reminding the user this is not a medical diagnosis.
+
         Args:
-          result (dict): A result dictionary containing:
-                - "prediction" (str): Predicted class label
-                - "confidence" (float): Confidence percentage
-                - "probabilities" (dict | None): Mapping of class -> probability percentage
-        Returns:
-            None
+            result: A result dictionary containing:
+                - prediction (str): Predicted class label.
+                - confidence (float): Confidence percentage.
+                - probabilities (dict | None): Mapping of class label to
+                  probability percentage.
         '''
         print(f"\n{'*' * 70}")
         print("PREDICTION RESULTS")
@@ -68,16 +82,28 @@ class FertilityPredictor(FertilityModel):
         print(f"{'*' * 70}\n")
 
     def predict_patient(self, patient_data: dict) -> dict:
-        ''' Makes a prediction using patient's data
+        ''' Validate patient input and return a decoded prediction result.
+
+        Checks that all required features are present and numeric, then
+        runs the model and returns the prediction with confidence and
+        per-class probabilities.
+
         Args:
-            patient_data (dict): Mapping of feature name -> value.
-                Must contain exactly the features in self._original_features.
+            patient_data: Mapping of feature name to value. Must contain
+                exactly the features in self._original_features.
+
         Returns:
-            dict: A result dictionary containing:
-                - "prediction" (str): Decoded predicted class label
-                - "confidence" (float): Confidence percentage
-                - "probabilities" (dict): Mapping of class label -> probability percentage
-                - "patient_data" (dict): The validated/converted patient input data
+            A result dictionary containing:
+                - prediction (str): Decoded predicted class label.
+                - confidence (float): Confidence percentage.
+                - probabilities (dict): Mapping of class label to probability
+                  percentage.
+                - patient_data (dict): The validated and converted input data.
+
+        Raises:
+            RuntimeError: If the model has not been trained yet.
+            ValueError: If required features are missing or any feature value
+                cannot be converted to float.
         '''
         # make a prediction using patient's data
         if not self._is_trained:
@@ -108,9 +134,14 @@ class FertilityPredictor(FertilityModel):
         return result
 
     def interactive_prediction(self):
-        ''' Run an interactive command-line session to collect patient's data
-        Returns:
-            None
+        ''' Run an interactive command-line session to collect patient data and display a prediction.
+
+        Prompts the user to enter 0 or 1 for each binary feature, and a
+        numeric value for Age. Validates each input before proceeding,
+        then calls predict_patient and displays the formatted result.
+
+        Raises:
+            RuntimeError: If the model has not been trained yet.
         '''
         print("Patient Data")
         print("*" * 70)
