@@ -36,7 +36,7 @@ class DataLoader:
             pd.DataFrame: the loaded DataFrame
         '''
 
-        url = "https://github.com/mashas07/Infertility-Project/blob/main/Female infertility.csv"
+        url = "https://raw.githubusercontent.com/mashas07/Infertility-Project/main/Female%20infertility.csv"
         with urllib.request.urlopen(url) as response:
             self._df = pd.read_csv(io.BytesIO(response.read()))
         self._df.columns = self._df.columns.str.strip()
