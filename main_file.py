@@ -18,7 +18,7 @@ def main():
     model = None
     while True: 
         input("\nPress Enter to continue...")
-        os.system('clear')
+        os.system('cls' if os.name == 'nt' else 'clear')
         print(f"{'*' * 60}")
         print("MENU")
         print(f"{'*' * 60}")
