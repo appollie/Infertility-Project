@@ -111,14 +111,12 @@ if st.button("Predict", type="primary"):
         df = predictor.loader.dataframe
         features = predictor.original_features[:8]
         features = [f for f in features if f in df.columns]
-
         dataset_means = df[features].mean()
         patient_vals = {f: float(result["patient_data"][f]) for f in features}
         patient_series = pd.Series(patient_vals)
         combined_max = pd.concat([dataset_means, patient_series]).groupby(level=0).max().replace(0, 1)
         norm_avg = dataset_means / combined_max
         norm_pat = patient_series / combined_max
-
         x = np.arange(len(features))
         width = 0.35
         fig2, ax2 = plt.subplots(figsize=(10, 5))
